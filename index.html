@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <header>
+        <h1>Crud Organizador de tarefas</h1>
+        <button id="openModal" onclick="addTask()">Criar Nova Tarefa</button>
+    </header>
+
+    <div class="modal" id="modal">
+        <div class="modal-inner">
+            <h1>Crie sua Tarefa</h1>
+            <div>
+                <span>Titulo da tarefa</span>
+                <input id="title" type="text">
+            </div>
+            <div>
+                <span>Data da Tarefa</span>
+                <input id="date" type="datetime-local">
+            </div>
+            <p>Descrição</p>
+            <textarea name="" id="description" cols="30" rows="10"></textarea><br>
+            <button id="closeModal">Criar Tarefa</button>
+        </div>
+
+
+    </div>
+
+    <div class="container">
+        <h2>Tarefas Pendentes</h2>
+        <div class="card">
+
+            <h3>Titulo da Tarefa</h3>
+            <span>Data da tarefa:</span>
+            <input type="date">
+            <p>
+                Curabitur commodo quis lectus nec volutpat. Donec tincidunt tincidunt felis, eu suscipit nibh maximus a.
+                Nam tincidunt neque at mauris vulputate fermentum. Curabitur sodales, arcu eu finibus vestibulum, mauris
+                ante ornare lorem, non fermentum tellus nisl ut justo. Suspendisse potenti. Ut sed vulputate ipsum.
+                Interdum et malesuada fames ac ante ipsum primis in faucibus. Mauris lacinia gravida ornare. Cras in
+                augue gravida, efficitur diam vel, ultricies tortor.
+            </p>
+            <div>
+                <span>Concluida:</span>
+                <input type="radio">
+            </div>
+            <button>Excluir Tarefa</button>
+            <button>Editar Tarefa</button>
+
+
+        </div>
+    </div>
+    <div class="container">
+        <h2>Tarefas Concluidas</h2>
+        <div class="card">
+            <h3>Titulo da Tarefa</h3>
+            <span>Data da tarefa:</span>
+            <input type="date">
+            <p>
+                Curabitur commodo quis lectus nec volutpat. Donec tincidunt tincidunt felis, eu suscipit nibh maximus a.
+                Nam tincidunt neque at mauris vulputate fermentum. Curabitur sodales, arcu eu finibus vestibulum, mauris
+                ante ornare lorem, non fermentum tellus nisl ut justo. Suspendisse potenti. Ut sed vulputate ipsum.
+                Interdum et malesuada fames ac ante ipsum primis in faucibus. Mauris lacinia gravida ornare. Cras in
+                augue gravida, efficitur diam vel, ultricies tortor.
+            </p>
+            <div>
+                <span>Concluida:</span>
+                <input type="radio">
+            </div>
+
+
+            <script src="script.js"></script>
+</body>
+
+</html>
