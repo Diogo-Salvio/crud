@@ -3,6 +3,8 @@ const closeBtn = document.getElementById('closeModal');
 const modal = document.getElementById('modal');
 
 const tasks = []
+const cardsId = []
+let cardsIdLenght = cardsId.length
 
 
 openBtn.addEventListener('click', () => {
@@ -48,18 +50,34 @@ function createTask() {
     newCard.appendChild(descriptionP);
 
     const buttonRemove = document.createElement('button');
-    buttonRemove.innerHTML = "Excluir Tarefa"
+    buttonRemove.innerHTML = "Excluir Tarefa";
     newCard.appendChild(buttonRemove);
 
     const buttonEdit = document.createElement('button');
-    buttonEdit.innerHTML = "Editar Tarefa"
+    buttonEdit.innerHTML = "Editar Tarefa";
     newCard.appendChild(buttonEdit);
     
-    containerCards.appendChild(newCard)
+    containerCards.appendChild(newCard);
     
+    title.value = '';
+    date.value = '';
+    description.value = '';
     
     tasks.push(newTask);
-    console.log(tasks);
+    newCard.id = tasks.length;
+    cardsId.push(newCard.id);
+    cardsIdLenght = cardsId.length;
+    
+
+    buttonRemove.setAttribute('onclick', 'removeTask(cardsIdLenght)');
+
+    console.log(cardsIdLenght);
 
 
+}
+
+
+function removeTask(cardId) {
+    const cardRemove = document.getElementById(cardId);
+    cardRemove.remove();
 }
