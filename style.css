@@ -70,15 +70,17 @@ header button:hover{
 
 .container {
     display: flex;
-    flex-direction: column;
+    justify-content: flex-start; 
+    gap: 15px;
     height: 90%;
     border-radius: 18px;
     background-color: white;
     padding: 20px;
     margin: 20px;
+    min-height: 400px;
 
 }
-.container h2 {
+.section1 h2 {
     width: 100%;
     text-align: center;
 }

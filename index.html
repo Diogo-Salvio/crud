@@ -12,7 +12,7 @@
 <body>
     <header>
         <h1>Crud Organizador de tarefas</h1>
-        <button id="openModal" onclick="addTask()">Criar Nova Tarefa</button>
+        <button id="openModal">Criar Nova Tarefa</button>
     </header>
 
     <div class="modal" id="modal">
@@ -24,37 +24,18 @@
             </div>
             <div>
                 <span>Data da Tarefa</span>
-                <input id="date" type="datetime-local">
+                <input id="date" type="date">
             </div>
             <p>Descrição</p>
             <textarea name="" id="description" cols="30" rows="10"></textarea><br>
-            <button id="closeModal">Criar Tarefa</button>
+            <button id="closeModal" onclick="createTask()">Criar Tarefa</button>
         </div>
 
 
     </div>
-
-    <div class="container">
+    <div class="section1">
         <h2>Tarefas Pendentes</h2>
-        <div class="card">
-
-            <h3>Titulo da Tarefa</h3>
-            <span>Data da tarefa:</span>
-            <input type="date">
-            <p>
-                Curabitur commodo quis lectus nec volutpat. Donec tincidunt tincidunt felis, eu suscipit nibh maximus a.
-                Nam tincidunt neque at mauris vulputate fermentum. Curabitur sodales, arcu eu finibus vestibulum, mauris
-                ante ornare lorem, non fermentum tellus nisl ut justo. Suspendisse potenti. Ut sed vulputate ipsum.
-                Interdum et malesuada fames ac ante ipsum primis in faucibus. Mauris lacinia gravida ornare. Cras in
-                augue gravida, efficitur diam vel, ultricies tortor.
-            </p>
-            <div>
-                <span>Concluida:</span>
-                <input type="radio">
-            </div>
-            <button>Excluir Tarefa</button>
-            <button>Editar Tarefa</button>
-
+        <div class="container" id="pendingtasks">
 
         </div>
     </div>
