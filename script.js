@@ -3,8 +3,6 @@ const closeBtn = document.getElementById('closeModal');
 const modal = document.getElementById('modal');
 
 const tasks = []
-const cardsId = []
-let cardsIdLenght = cardsId.length
 
 
 openBtn.addEventListener('click', () => {
@@ -63,21 +61,32 @@ function createTask() {
     date.value = '';
     description.value = '';
     
-    tasks.push(newTask);
-    newCard.id = tasks.length;
-    cardsId.push(newCard.id);
-    cardsIdLenght = cardsId.length;
     
-
-    buttonRemove.setAttribute('onclick', 'removeTask(cardsIdLenght)');
-
-    console.log(cardsIdLenght);
-
+    tasks.push(newTask);
+    const cardId = tasks.length;
+    newCard.id = `card${cardId}`;
+    heading.id = `title${cardId}`;
+    inputDate.id = `date${cardId}`;
+    descriptionP.id = `description${cardId}`;
+    
+    buttonRemove.addEventListener("click", () => {
+        removeTask(cardId);
+    });
 
 }
 
 
 function removeTask(cardId) {
-    const cardRemove = document.getElementById(cardId);
+    const cardRemove = document.getElementById(`card${cardId}`);
     cardRemove.remove();
+    tasks.splice(cardId -1, 1)
+
+}
+
+
+function editTask(cardId) {
+    const cardEdit = Document.getElementById(`card${cardId}`);
+    
+    
+    
 }
