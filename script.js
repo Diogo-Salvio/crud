@@ -96,7 +96,10 @@ function createTask() {
         editTask(cardId);
     });
 
-
+    const confirmEditButton = document.getElementById('closeModal2');
+    confirmEditButton.addEventListener("click", () => {
+        confirmEditTask(cardId);
+    })
 
 }
 
@@ -113,7 +116,19 @@ function editTask(cardId) {
     const cardEdit = document.getElementById(`card${cardId}`);
     const titleEdit = document.getElementById(`title${cardId}`);
     const dateEdit = document.getElementById(`date${cardId}`);
-    const descriptionEdit = document.getElementById(`title${cardId}`);
+    const descriptionEdit = document.getElementById(`description${cardId}`);
+
+    const editInputTitle = document.getElementById('inputedittitle');
+    const editInputDate = document.getElementById('inputeditdate');
+    const editInputDescription = document.getElementById('inputeditdescription');
 
     
+    editInputTitle.value = titleEdit.textContent;
+    editInputDate.value = dateEdit.textContent;
+    editInputDescription.value = descriptionEdit.textContent;
+
 }
+
+function confirmEditTask(cardId) {
+    console.log(cardId);
+};
