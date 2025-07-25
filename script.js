@@ -110,17 +110,16 @@ function removeTask(cardId) {
 
 let currentEditCardId = null;
 
+const editInputTitle = document.getElementById('inputedittitle');
+const editInputDate = document.getElementById('inputeditdate');
+const editInputDescription = document.getElementById('inputeditdescription');
+
 function editTask(cardId) {
     const cardEdit = document.getElementById(`card${cardId}`);
     const titleEdit = document.getElementById(`title${cardId}`);
     const dateEdit = document.getElementById(`date${cardId}`);
     const descriptionEdit = document.getElementById(`description${cardId}`);
 
-    const editInputTitle = document.getElementById('inputedittitle');
-    const editInputDate = document.getElementById('inputeditdate');
-    const editInputDescription = document.getElementById('inputeditdescription');
-
-    
     editInputTitle.value = titleEdit.textContent;
     editInputDate.value = dateEdit.textContent;
     editInputDescription.value = descriptionEdit.textContent;
@@ -133,9 +132,20 @@ function editTask(cardId) {
 
 const confirmEditButton = document.getElementById('closeModal2');
 confirmEditButton.addEventListener("click", () => {
-    confirmEditTask(cardId);
+    confirmEditTask(currentEditCardId);
 })
 
 function confirmEditTask(cardId) {
+    const cardEdit = document.getElementById(`card${cardId}`);
+    const titleEdit = document.getElementById(`title${cardId}`);
+    const dateEdit = document.getElementById(`date${cardId}`);
+    const descriptionEdit = document.getElementById(`description${cardId}`);
+
+    titleEdit.textContent = editInputTitle.value;
+    dateEdit.textContent = editInputDate.value;
+    descriptionEdit.textContent = editInputDescription.value;
+
+    modalEdit.classList.remove("open");
+
     console.log(cardId);
 };
