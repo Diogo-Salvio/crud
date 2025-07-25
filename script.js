@@ -34,67 +34,74 @@ function createTask() {
 
     const newTask = { title: title.value, date: date.value, description: description.value };
 
-    const containerCards = document.getElementById('pendingtasks')
-    const newCard = document.createElement('div');
-    newCard.classList.add('card');
+    if (date.value.length != 10) {
+        window.alert('Insira uma data válida');
+    } else {
+        const containerCards = document.getElementById('pendingtasks')
+        const newCard = document.createElement('div');
+        newCard.classList.add('card');
 
-    const heading = document.createElement('h3');
-    heading.textContent = newTask.title;
-    newCard.appendChild(heading);
+        const heading = document.createElement('h3');
+        heading.textContent = newTask.title;
+        newCard.appendChild(heading);
 
-    const spanDate = document.createElement('span');
-    spanDate.textContent = 'Data da tarefa:';
-    newCard.appendChild(spanDate);
+        const spanDate = document.createElement('span');
+        spanDate.textContent = 'Data da tarefa:';
+        newCard.appendChild(spanDate);
 
-    const inputDate = document.createElement('input');
-    inputDate.type = 'date';
-    inputDate.value = newTask.date;
-    newCard.appendChild(inputDate);
+        const inputDate = document.createElement('input');
+        inputDate.type = 'date';
+        inputDate.readOnly = true;
+        inputDate.value = newTask.date;
+        newCard.appendChild(inputDate);
 
-    const descriptionP = document.createElement('p');
-    descriptionP.textContent = newTask.description;
-    newCard.appendChild(descriptionP);
+        const descriptionP = document.createElement('p');
+        descriptionP.textContent = newTask.description;
+        newCard.appendChild(descriptionP);
 
-    const buttonRemove = document.createElement('button');
-    buttonRemove.innerHTML = "Excluir Tarefa";
-    newCard.appendChild(buttonRemove);
+        const buttonRemove = document.createElement('button');
+        buttonRemove.innerHTML = "Excluir Tarefa";
+        newCard.appendChild(buttonRemove);
 
-    const buttonEdit = document.createElement('button');
-    buttonEdit.innerHTML = "Editar Tarefa";
-    newCard.appendChild(buttonEdit);
-    buttonEdit.id = "openModalEdit";
+        const buttonEdit = document.createElement('button');
+        buttonEdit.innerHTML = "Editar Tarefa";
+        newCard.appendChild(buttonEdit);
+        buttonEdit.id = "openModalEdit";
 
-    containerCards.appendChild(newCard);
+        containerCards.appendChild(newCard);
 
-    title.value = '';
-    date.value = '';
-    description.value = '';
+        title.value = '';
+        date.value = '';
+        description.value = '';
 
 
-    tasks.push(newTask);
-    const cardId = tasks.length;
-    newCard.id = `card${cardId}`;
-    heading.id = `title${cardId}`;
-    inputDate.id = `date${cardId}`;
-    descriptionP.id = `description${cardId}`;
+        tasks.push(newTask);
+        const cardId = tasks.length;
+        newCard.id = `card${cardId}`;
+        heading.id = `title${cardId}`;
+        inputDate.id = `date${cardId}`;
+        descriptionP.id = `description${cardId}`;
 
-    buttonRemove.addEventListener("click", () => {
-        removeTask(cardId);
-    });
+        buttonRemove.addEventListener("click", () => {
+            removeTask(cardId);
+        });
 
-    buttonEdit.addEventListener("click", () => {
-        modalEdit.classList.add("open");
-    })
+        buttonEdit.addEventListener("click", () => {
+            modalEdit.classList.add("open");
+        })
 
-    modalEdit.addEventListener('click', (event) => {
-        if (event.target === modalEdit) {
-            modalEdit.classList.remove("open");
-        }
-    })
+        modalEdit.addEventListener('click', (event) => {
+            if (event.target === modalEdit) {
+                modalEdit.classList.remove("open");
+            }
+        })
 
-    buttonEdit.addEventListener("click", () => {
-        editTask(cardId);
-    });
+        buttonEdit.addEventListener("click", () => {
+            editTask(cardId);
+        });
+
+    }
+
 
 
 
@@ -121,7 +128,7 @@ function editTask(cardId) {
     const descriptionEdit = document.getElementById(`description${cardId}`);
 
     editInputTitle.value = titleEdit.textContent;
-    editInputDate.value = dateEdit.textContent;
+    editInputDate.value = dateEdit.value;
     editInputDescription.value = descriptionEdit.textContent;
 
     currentEditCardId = cardId;
