@@ -28,16 +28,20 @@ modal.addEventListener('click', (event) => {
 const title = document.getElementById('title');
 const date = document.getElementById('date');
 const description = document.getElementById('description');
-
+const containerCards = document.getElementById('pendingtasks')
+const containerFinishCards = document.getElementById('finishtasks')
 
 function createTask() {
 
-    const newTask = { title: title.value, date: date.value, description: description.value };
+    const newTask = { title: title.value, date: date.value, description: description.value, id: tasks.length + 1 };
 
     if (date.value.length != 10) {
-        window.alert('Insira uma data válida');
+        window.alert('Insira uma data válida!');
+    } else if (!description.value.trim()) {
+        window.alert('Adicione uma descrição!');
+    } else if (!title.value.trim()) {
+        window.alert('Adicione um titulo!');
     } else {
-        const containerCards = document.getElementById('pendingtasks')
         const newCard = document.createElement('div');
         newCard.classList.add('card');
 
@@ -68,6 +72,14 @@ function createTask() {
         newCard.appendChild(buttonEdit);
         buttonEdit.id = "openModalEdit";
 
+        const checkBoxLabel = document.createElement('label');
+        checkBoxLabel.innerHTML = "Concluir tarefa:";
+        const inputTypeCheckBox = document.createElement('input');
+        inputTypeCheckBox.type = "checkbox";
+        checkBoxLabel.appendChild(inputTypeCheckBox);
+        newCard.appendChild(checkBoxLabel);
+
+
         containerCards.appendChild(newCard);
 
         title.value = '';
@@ -81,12 +93,13 @@ function createTask() {
         heading.id = `title${cardId}`;
         inputDate.id = `date${cardId}`;
         descriptionP.id = `description${cardId}`;
+        inputTypeCheckBox.id = `checkTask${cardId}`;
 
-        buttonRemove.addEventListener("click", () => {
+        buttonRemove.addEventListener('click', () => {
             removeTask(cardId);
         });
 
-        buttonEdit.addEventListener("click", () => {
+        buttonEdit.addEventListener('click', () => {
             modalEdit.classList.add("open");
         })
 
@@ -96,9 +109,18 @@ function createTask() {
             }
         })
 
-        buttonEdit.addEventListener("click", () => {
+        buttonEdit.addEventListener('click', () => {
             editTask(cardId);
         });
+
+        inputTypeCheckBox.addEventListener('change', () => {
+            if (inputTypeCheckBox.checked) {
+                finishTask(cardId);
+            } else {
+                moveToPendingTasks(cardId);
+            }
+        })
+
 
     }
 
@@ -156,3 +178,19 @@ function confirmEditTask(cardId) {
 
     console.log(cardId);
 };
+
+
+
+
+function finishTask(cardId) {
+    const cardToMove = document.getElementById(`card${cardId}`);
+    containerFinishCards.appendChild(cardToMove);
+
+
+};
+
+function moveToPendingTasks(cardId) {
+    const cardToMove = document.getElementById(`card${cardId}`)
+    containerCards.appendChild(cardToMove);
+
+}
