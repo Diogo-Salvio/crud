@@ -8,7 +8,7 @@ const openBtnEdit = document.getElementById('openModalEdit');
 const closeBtnEdit = document.getElementById('closeModal2');
 const modalEdit = document.getElementById('modal2');
 
-const tasks = []
+const tasks = [];
 
 
 openBtn.addEventListener('click', () => {
@@ -33,15 +33,23 @@ const containerFinishCards = document.getElementById('finishtasks')
 
 function createTask() {
 
-    const newTask = { title: title.value, date: date.value, description: description.value, id: tasks.length + 1 };
-
     const today = new Date();
     today.setHours(0, 0, 0, 0);
     const taskdate = new Date(date.value);
     taskdate.setHours(0, 0, 0, 0);
 
-    console.log(today.getTime());
-    console.log(taskdate.getTime());
+    const newTask = { 
+        title: title.value, 
+        date: date.value, 
+        description: description.value, 
+        id: `card${tasks.length + 1}`,
+        datevalue: taskdate.getTime()
+    };
+    //console.log(newTask)
+
+
+    //console.log(today.getTime());
+    //console.log(taskdate.getTime());
 
     if (date.value.length != 10 || today.getTime() > taskdate.getTime()) {
         window.alert('Insira uma data válida!');
@@ -89,7 +97,9 @@ function createTask() {
         newCard.appendChild(checkBoxLabel);
 
 
-        containerCards.appendChild(newCard);
+        //containerCards.appendChild(newCard);
+
+
 
         title.value = '';
         date.value = '';
@@ -103,6 +113,21 @@ function createTask() {
         inputDate.id = `date${cardId}`;
         descriptionP.id = `description${cardId}`;
         inputTypeCheckBox.id = `checkTask${cardId}`;
+
+
+        tasks.sort((a, b) => {
+            return a.datevalue - b.datevalue;
+        })
+        
+        for (const task of tasks){
+            const divCard = document.getElementById(task.id)
+            console.log(task.id)            //containerCards.appendChild(divCard);
+        };
+
+
+
+
+
 
         buttonRemove.addEventListener('click', () => {
             removeTask(cardId);
@@ -134,9 +159,13 @@ function createTask() {
     }
 
 
+    console.log(tasks)
 
 
 }
+
+
+
 
 
 function removeTask(cardId) {
