@@ -35,8 +35,17 @@ function createTask() {
 
     const newTask = { title: title.value, date: date.value, description: description.value, id: tasks.length + 1 };
 
-    if (date.value.length != 10) {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    const taskdate = new Date(date.value);
+    taskdate.setHours(0, 0, 0, 0);
+
+    console.log(today.getTime());
+    console.log(taskdate.getTime());
+
+    if (date.value.length != 10 || today.getTime() > taskdate.getTime()) {
         window.alert('Insira uma data válida!');
+        date.value = '';
     } else if (!description.value.trim()) {
         window.alert('Adicione uma descrição!');
     } else if (!title.value.trim()) {
