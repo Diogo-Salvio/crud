@@ -9,6 +9,7 @@ const closeBtnEdit = document.getElementById('closeModal2');
 const modalEdit = document.getElementById('modal2');
 
 const tasks = [];
+const finishTasks = [];
 
 
 openBtn.addEventListener('click', () => {
@@ -31,6 +32,7 @@ const description = document.getElementById('description');
 const containerCards = document.getElementById('pendingtasks')
 const containerFinishCards = document.getElementById('finishtasks')
 
+
 function createTask() {
 
     const today = new Date();
@@ -38,18 +40,15 @@ function createTask() {
     const taskdate = new Date(date.value);
     taskdate.setHours(0, 0, 0, 0);
 
-    const newTask = { 
-        title: title.value, 
-        date: date.value, 
-        description: description.value, 
-        id: `card${tasks.length + 1}`,
+    const newTask = {
+        title: title.value,
+        date: date.value,
+        description: description.value,
+        id: tasks.length + 1,
         datevalue: taskdate.getTime()
     };
-    //console.log(newTask)
 
 
-    //console.log(today.getTime());
-    //console.log(taskdate.getTime());
 
     if (date.value.length != 10 || today.getTime() > taskdate.getTime()) {
         window.alert('Insira uma data válida!');
@@ -59,11 +58,36 @@ function createTask() {
     } else if (!title.value.trim()) {
         window.alert('Adicione um titulo!');
     } else {
+
+        tasks.push(newTask);
+
+
+
+        containerCards.innerHTML = '';
+
+        title.value = '';
+        date.value = '';
+        description.value = '';
+
+        renderCard();
+    }
+
+
+}
+
+function renderCard() {
+    containerCards.innerHTML = ""
+
+    tasks.sort((a, b) => {
+        return a.datevalue - b.datevalue;
+    })
+
+    for (const task of tasks) {
         const newCard = document.createElement('div');
         newCard.classList.add('card');
 
         const heading = document.createElement('h3');
-        heading.textContent = newTask.title;
+        heading.textContent = task.title;
         newCard.appendChild(heading);
 
         const spanDate = document.createElement('span');
@@ -73,11 +97,11 @@ function createTask() {
         const inputDate = document.createElement('input');
         inputDate.type = 'date';
         inputDate.readOnly = true;
-        inputDate.value = newTask.date;
+        inputDate.value = task.date;
         newCard.appendChild(inputDate);
 
         const descriptionP = document.createElement('p');
-        descriptionP.textContent = newTask.description;
+        descriptionP.textContent = task.description;
         newCard.appendChild(descriptionP);
 
         const buttonRemove = document.createElement('button');
@@ -97,40 +121,16 @@ function createTask() {
         newCard.appendChild(checkBoxLabel);
 
 
-        //containerCards.appendChild(newCard);
-
-
-
-        title.value = '';
-        date.value = '';
-        description.value = '';
-
-
-        tasks.push(newTask);
         const cardId = tasks.length;
-        newCard.id = `card${cardId}`;
-        heading.id = `title${cardId}`;
-        inputDate.id = `date${cardId}`;
-        descriptionP.id = `description${cardId}`;
-        inputTypeCheckBox.id = `checkTask${cardId}`;
-
-
-        tasks.sort((a, b) => {
-            return a.datevalue - b.datevalue;
-        })
-        
-        for (const task of tasks){
-            const divCard = document.getElementById(task.id)
-            console.log(task.id)            //containerCards.appendChild(divCard);
-        };
-
-
-
-
+        newCard.id = `card${task.id}`;
+        heading.id = `title${task.id}`;
+        inputDate.id = `date${task.id}`;
+        descriptionP.id = `description${task.id}`;
+        inputTypeCheckBox.id = `checkTask${task.id}`;
 
 
         buttonRemove.addEventListener('click', () => {
-            removeTask(cardId);
+            removeTask(task.id);
         });
 
         buttonEdit.addEventListener('click', () => {
@@ -144,26 +144,20 @@ function createTask() {
         })
 
         buttonEdit.addEventListener('click', () => {
-            editTask(cardId);
+            editTask(task.id);
         });
 
         inputTypeCheckBox.addEventListener('change', () => {
             if (inputTypeCheckBox.checked) {
-                finishTask(cardId);
+                finishTask(task.id);
             } else {
-                moveToPendingTasks(cardId);
+                moveToPendingTasks(task.id);
             }
-        })
+        });
 
-
+        containerCards.appendChild(newCard);
     }
-
-
-    console.log(tasks)
-
-
 }
-
 
 
 
@@ -172,6 +166,7 @@ function removeTask(cardId) {
     const cardRemove = document.getElementById(`card${cardId}`);
     cardRemove.remove();
     tasks.splice(cardId - 1, 1)
+    renderCard();
 
 }
 
@@ -214,7 +209,8 @@ function confirmEditTask(cardId) {
 
     modalEdit.classList.remove("open");
 
-    console.log(cardId);
+    renderCard();
+
 };
 
 
@@ -224,11 +220,24 @@ function finishTask(cardId) {
     const cardToMove = document.getElementById(`card${cardId}`);
     containerFinishCards.appendChild(cardToMove);
 
+    const indextomove = tasks.findIndex(task => task.id === cardId);
+    finishTasks.push(tasks[indextomove]);
+    tasks.splice(indextomove, 1);
+    console.log(finishTasks);
+    console.log(tasks);
 
 };
 
 function moveToPendingTasks(cardId) {
     const cardToMove = document.getElementById(`card${cardId}`)
     containerCards.appendChild(cardToMove);
+
+    const indextomove = finishTasks.findIndex(task => task.id === cardId);
+    tasks.push(finishTasks[indextomove]);
+    finishTasks.splice(indextomove, 1);
+    console.log(finishTasks);
+    console.log(tasks);
+
+    //renderCard();
 
 }
