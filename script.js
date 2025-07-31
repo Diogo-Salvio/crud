@@ -199,13 +199,45 @@ function confirmEditTask(cardId) {
     const dateEdit = document.getElementById(`date${cardId}`);
     const descriptionEdit = document.getElementById(`description${cardId}`);
 
-    titleEdit.textContent = editInputTitle.value;
-    dateEdit.textContent = editInputDate.value;
-    descriptionEdit.textContent = editInputDescription.value;
+    //Variáveis importante para a validação da Data
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    const taskdate = new Date(editInputDate.value);
+    taskdate.setHours(0, 0, 0, 0);
 
-    modalEdit.classList.remove("open");
+    //Validação para os dados inseridos no modal de edição
+    if (editInputDate.value.length != 10 || today.getTime() > taskdate.getTime()) {
+        window.alert('Insira uma data válida!');
+        date.value = '';
+    } else if (!editInputDescription.value.trim()) {
+        window.alert('A tarefa precisar ter uma descrição!');
+    } else if (!editInputTitle.value.trim()) {
+        window.alert('A tarefa precisar ter um título!');
+    } else {
+        //Ao passar por todas as validações o código atualiza os dados do card e também atualiza os valores das chaves que foram editadas no array tasks
+        titleEdit.textContent = editInputTitle.value;
+        dateEdit.textContent = editInputDate.value;
+        descriptionEdit.textContent = editInputDescription.value;
 
-    renderCard();
+        indexToEdit = tasks.findIndex(task => task.id === cardId);
+
+        const valueOfTheNewEditedTitle = titleEdit.textContent;
+        const valueOfTheNewEditedDate = dateEdit.textContent;
+        const valueOfTheNewEditedDescription = descriptionEdit.textContent;
+
+        tasks[indexToEdit].title = valueOfTheNewEditedTitle;
+        tasks[indexToEdit].date = valueOfTheNewEditedDate;
+        tasks[indexToEdit].description = valueOfTheNewEditedDescription;
+        tasks[indexToEdit].datevalue = taskdate.getTime();
+
+        modalEdit.classList.remove("open");
+
+        renderCard();
+    }
+
+
+
+
 
 };
 
