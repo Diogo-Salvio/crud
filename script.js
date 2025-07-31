@@ -219,25 +219,35 @@ function confirmEditTask(cardId) {
         dateEdit.textContent = editInputDate.value;
         descriptionEdit.textContent = editInputDescription.value;
 
-        indexToEdit = tasks.findIndex(task => task.id === cardId);
-
         const valueOfTheNewEditedTitle = titleEdit.textContent;
         const valueOfTheNewEditedDate = dateEdit.textContent;
         const valueOfTheNewEditedDescription = descriptionEdit.textContent;
 
-        tasks[indexToEdit].title = valueOfTheNewEditedTitle;
-        tasks[indexToEdit].date = valueOfTheNewEditedDate;
-        tasks[indexToEdit].description = valueOfTheNewEditedDescription;
-        tasks[indexToEdit].datevalue = taskdate.getTime();
+        indexToEditInPending = tasks.findIndex(task => task.id === cardId);
+        indexToEditInFinish = finishTasks.findIndex(task => task.id === cardId);
+        /*
+        if (indexToEditInPending !== -1 ) {
+            tasks[indexToEditInPending].title = valueOfTheNewEditedTitle;
+            tasks[indexToEditInPending].date = valueOfTheNewEditedDate;
+            tasks[indexToEditInPending].description = valueOfTheNewEditedDescription;
+            tasks[indexToEditInPending].datevalue = taskdate.getTime();
 
-        modalEdit.classList.remove("open");
+            modalEdit.classList.remove("open");
+            renderCard();
+        } else {
+            finishTasks[indexToEditInFinish].title = valueOfTheNewEditedTitle;
+            finishTasks[indexToEditInFinish].date = valueOfTheNewEditedDate;
+            finishTasks[indexToEditInFinish].description = valueOfTheNewEditedDescription;
+            finishTasks[indexToEditInFinish].datevalue = taskdate.getTime();
 
-        renderCard();
+            modalEdit.classList.remove("open");
+            renderFinishTask();
+        }*/
+
+
+
+
     }
-
-
-
-
 
 };
 
@@ -249,9 +259,9 @@ function finishTask(cardId) {
     const indextomove = tasks.findIndex(task => task.id === cardId);
     finishTasks.push(tasks[indextomove]);
     tasks.splice(indextomove, 1);
-    console.log(finishTasks);
-    console.log(tasks);
 
+
+    renderFinishCard();
 };
 
 //Função que move a tarefa para as o grupo de tarefas pendentes. Remove do array finishtasks e adiciona no array tasks
@@ -262,9 +272,90 @@ function moveToPendingTasks(cardId) {
     const indextomove = finishTasks.findIndex(task => task.id === cardId);
     tasks.push(finishTasks[indextomove]);
     finishTasks.splice(indextomove, 1);
-    console.log(finishTasks);
-    console.log(tasks);
 
-    //renderCard();
+    renderCard();
 
 }
+
+function renderFinishCard() {
+    containerFinishCards.innerHTML = ""
+
+    finishTasks.sort((a, b) => {
+        return a.datevalue - b.datevalue;
+    })
+    //Renderização/criação de todos os card do array finishtasks[] 
+    for (const finishtask of finishTasks) {
+        const newCard = document.createElement('div');
+        newCard.classList.add('card');
+
+        const heading = document.createElement('h3');
+        heading.textContent = finishtask.title;
+        newCard.appendChild(heading);
+
+        const spanDate = document.createElement('span');
+        spanDate.textContent = 'Data da tarefa:';
+        newCard.appendChild(spanDate);
+
+        const inputDate = document.createElement('input');
+        inputDate.type = 'date';
+        inputDate.readOnly = true;
+        inputDate.value = finishtask.date;
+        newCard.appendChild(inputDate);
+
+        const descriptionP = document.createElement('p');
+        descriptionP.textContent = finishtask.description;
+        newCard.appendChild(descriptionP);
+
+        const buttonRemove = document.createElement('button');
+        buttonRemove.innerHTML = "Excluir Tarefa";
+        newCard.appendChild(buttonRemove);
+
+        const buttonEdit = document.createElement('button');
+        buttonEdit.innerHTML = "Editar Tarefa";
+        newCard.appendChild(buttonEdit);
+        buttonEdit.id = "openModalEdit";
+
+        const checkBoxLabel = document.createElement('label');
+        checkBoxLabel.innerHTML = "Concluir tarefa:";
+        const inputTypeCheckBox = document.createElement('input');
+        inputTypeCheckBox.type = "checkbox";
+        checkBoxLabel.appendChild(inputTypeCheckBox);
+        newCard.appendChild(checkBoxLabel);
+
+        //Atribuição de um ID único para todos os dados que podem ser alterados na função editCard() e nas função para finalizar a tarefa
+        newCard.id = `card${finishtask.id}`;
+        heading.id = `title${finishtask.id}`;
+        inputDate.id = `date${finishtask.id}`;
+        descriptionP.id = `description${finishtask.id}`;
+        inputTypeCheckBox.id = `checkTask${finishtask.id}`;
+
+        //Adição dos Listeners para os botões criados
+        buttonRemove.addEventListener('click', () => {
+            removeTask(finishtask.id);
+        });
+
+        buttonEdit.addEventListener('click', () => {
+            modalEdit.classList.add("open");
+        })
+
+        modalEdit.addEventListener('click', (event) => {
+            if (event.target === modalEdit) {
+                modalEdit.classList.remove("open");
+            }
+        })
+
+        buttonEdit.addEventListener('click', () => {
+            editTask(finishtask.id);
+        });
+
+        inputTypeCheckBox.addEventListener('change', () => {
+            if (inputTypeCheckBox.checked) {
+                finishTask(finishtask.id);
+            } else {
+                moveToPendingTasks(finishtask.id);
+            }
+        });
+
+        containerFinishCards.appendChild(newCard);
+    }
+};
