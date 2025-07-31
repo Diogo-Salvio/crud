@@ -1,17 +1,19 @@
-//Delete Button
+//Botões do Modal para criação de tarefa
 const openBtn = document.getElementById('openModal');
 const closeBtn = document.getElementById('closeModal');
 const modal = document.getElementById('modal');
 
-//Edit Button
+//Botões do modal para edição de tarefa
 const openBtnEdit = document.getElementById('openModalEdit');
 const closeBtnEdit = document.getElementById('closeModal2');
 const modalEdit = document.getElementById('modal2');
 
+//Arrays referente às tasks pendentes e as finalizadas
 const tasks = [];
 const finishTasks = [];
 
 
+//Eventos de configuração do Modal para criarção de Tarefas
 openBtn.addEventListener('click', () => {
     modal.classList.add("open");
 })
@@ -26,15 +28,22 @@ modal.addEventListener('click', (event) => {
     }
 })
 
+
+//Inputs do Modal para criação de tarefa
 const title = document.getElementById('title');
 const date = document.getElementById('date');
 const description = document.getElementById('description');
+
+//Containers para as tasks pendentes e para as finalizadas
 const containerCards = document.getElementById('pendingtasks')
 const containerFinishCards = document.getElementById('finishtasks')
 
-
+//Função que cria a task 
+//Adiciona o objeto newTask no Array tasks[] e em seguida chama a função renderCard()
 function createTask() {
 
+
+    //Variáveis importante para a validação da Data
     const today = new Date();
     today.setHours(0, 0, 0, 0);
     const taskdate = new Date(date.value);
@@ -47,9 +56,6 @@ function createTask() {
         id: tasks.length + 1,
         datevalue: taskdate.getTime()
     };
-
-
-
     if (date.value.length != 10 || today.getTime() > taskdate.getTime()) {
         window.alert('Insira uma data válida!');
         date.value = '';
@@ -58,30 +64,23 @@ function createTask() {
     } else if (!title.value.trim()) {
         window.alert('Adicione um titulo!');
     } else {
-
         tasks.push(newTask);
-
-
-
         containerCards.innerHTML = '';
-
         title.value = '';
         date.value = '';
         description.value = '';
-
         renderCard();
     }
-
-
 }
 
+//Função para organizar os cards e redenderizar eles no container
 function renderCard() {
     containerCards.innerHTML = ""
 
     tasks.sort((a, b) => {
         return a.datevalue - b.datevalue;
     })
-
+    //Renderização/criação de todos os card do array tasks[] 
     for (const task of tasks) {
         const newCard = document.createElement('div');
         newCard.classList.add('card');
@@ -120,15 +119,14 @@ function renderCard() {
         checkBoxLabel.appendChild(inputTypeCheckBox);
         newCard.appendChild(checkBoxLabel);
 
-
-        const cardId = tasks.length;
+        //Atribuição de um ID único para todos os dados que podem ser alterados na função editCard() e nas função para finalizar a tarefa
         newCard.id = `card${task.id}`;
         heading.id = `title${task.id}`;
         inputDate.id = `date${task.id}`;
         descriptionP.id = `description${task.id}`;
         inputTypeCheckBox.id = `checkTask${task.id}`;
 
-
+        //Adição dos Listeners para os botões criados
         buttonRemove.addEventListener('click', () => {
             removeTask(task.id);
         });
@@ -159,9 +157,7 @@ function renderCard() {
     }
 }
 
-
-
-
+//Função que apaga o card
 function removeTask(cardId) {
     const cardRemove = document.getElementById(`card${cardId}`);
     cardRemove.remove();
@@ -170,14 +166,16 @@ function removeTask(cardId) {
 
 }
 
+//Variável que guarda qual Card está sendo editado
 let currentEditCardId = null;
 
+//Inputs do modal de edição
 const editInputTitle = document.getElementById('inputedittitle');
 const editInputDate = document.getElementById('inputeditdate');
 const editInputDescription = document.getElementById('inputeditdescription');
 
+//Função que adiciona os dados do card que foi escolido para ser editado no modal de edição.
 function editTask(cardId) {
-    const cardEdit = document.getElementById(`card${cardId}`);
     const titleEdit = document.getElementById(`title${cardId}`);
     const dateEdit = document.getElementById(`date${cardId}`);
     const descriptionEdit = document.getElementById(`description${cardId}`);
@@ -187,18 +185,16 @@ function editTask(cardId) {
     editInputDescription.value = descriptionEdit.textContent;
 
     currentEditCardId = cardId;
-
-    console.log(cardId)
-
 }
 
+//Adição no evento click no botão ne finalizar a edição
 const confirmEditButton = document.getElementById('closeModal2');
 confirmEditButton.addEventListener("click", () => {
     confirmEditTask(currentEditCardId);
 })
 
+//Função que adiciona os valores novos ao Card
 function confirmEditTask(cardId) {
-    const cardEdit = document.getElementById(`card${cardId}`);
     const titleEdit = document.getElementById(`title${cardId}`);
     const dateEdit = document.getElementById(`date${cardId}`);
     const descriptionEdit = document.getElementById(`description${cardId}`);
@@ -213,9 +209,7 @@ function confirmEditTask(cardId) {
 
 };
 
-
-
-
+//Função que move a tarefa para as o grupo de tarefas prontas. Remove do array tasks e adiciona no array finishtasks
 function finishTask(cardId) {
     const cardToMove = document.getElementById(`card${cardId}`);
     containerFinishCards.appendChild(cardToMove);
@@ -228,6 +222,7 @@ function finishTask(cardId) {
 
 };
 
+//Função que move a tarefa para as o grupo de tarefas pendentes. Remove do array finishtasks e adiciona no array tasks
 function moveToPendingTasks(cardId) {
     const cardToMove = document.getElementById(`card${cardId}`)
     containerCards.appendChild(cardToMove);
