@@ -403,10 +403,10 @@ function copyDescription(cardId) {
     const textToBeCopy = document.getElementById(`description${cardId}`);
     navigator.clipboard.writeText(textToBeCopy.textContent)
         .then((value) => {
-            console.log(`O texto (${value}) foi copiado`);
+            console.log('Texto copiado!');
         })
         .catch(() => {
-            console.log("Elemento não é uma string")
+            console.log("Elemento não é uma string");
         })
 };
 
