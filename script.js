@@ -9,8 +9,24 @@ const closeBtnEdit = document.getElementById('closeModal2');
 const modalEdit = document.getElementById('modal2');
 
 //Arrays referente às tasks pendentes e as finalizadas
-const tasks = [];
+const tasks = [
+    {
+        date: "2111-01-01",
+        datevalue: 4449438000000,
+        description: "Em termos gerais, aval pode significar aprovação, apoio ou garantia. No contexto jurídico e financeiro, o aval é uma garantia pessoal dada em títulos de crédito, onde uma pessoa (o avalista) se compromete a pagar a dívida caso o devedor principal não o faça. ",
+        id: 1,
+        title: "1"
+    },
+    {
+        date: "2111-02-02",
+        datevalue: 4449439000000,
+        description: "Em termos gerais, aval pode significar aprovação, apoio ou garantia. No contexto jurídico e financeiro, o aval é uma garantia pessoal dada em títulos de crédito, onde uma pessoa (o avalista) se compromete a pagar a dívida caso o devedor principal não o faça. ",
+        id: 2,
+        title: "2"
+    }
+];
 const finishTasks = [];
+
 
 
 //Eventos de configuração do Modal para criarção de Tarefas
@@ -103,6 +119,10 @@ function renderCard() {
         descriptionP.textContent = task.description;
         newCard.appendChild(descriptionP);
 
+        const copyButton = document.createElement('button');
+        copyButton.innerHTML = "Copiar tarefa";
+        newCard.appendChild(copyButton);
+
         const buttonRemove = document.createElement('button');
         buttonRemove.innerHTML = "Excluir Tarefa";
         newCard.appendChild(buttonRemove);
@@ -114,9 +134,11 @@ function renderCard() {
 
         const checkBoxLabel = document.createElement('label');
         checkBoxLabel.innerHTML = "Concluir tarefa:";
+
         const inputTypeCheckBox = document.createElement('input');
         inputTypeCheckBox.type = "checkbox";
         checkBoxLabel.appendChild(inputTypeCheckBox);
+
         newCard.appendChild(checkBoxLabel);
 
         //Atribuição de um ID único para todos os dados que podem ser alterados na função editCard() e nas função para finalizar a tarefa
@@ -152,6 +174,10 @@ function renderCard() {
                 moveToPendingTasks(task.id);
             }
         });
+
+        copyButton.addEventListener('click', () => {
+            copyDescription(task.id);
+        })
 
         containerCards.appendChild(newCard);
     }
@@ -234,8 +260,8 @@ function confirmEditTask(cardId) {
 
         const indexToEditInPending = tasks.findIndex(task => task.id === cardId);
         const indexToEditInFinish = finishTasks.findIndex(task => task.id === cardId);
-        
-        if (indexToEditInPending !== -1 ) {
+
+        if (indexToEditInPending !== -1) {
             tasks[indexToEditInPending].title = valueOfTheNewEditedTitle;
             tasks[indexToEditInPending].date = valueOfTheNewEditedDate;
             tasks[indexToEditInPending].description = valueOfTheNewEditedDescription;
@@ -243,7 +269,7 @@ function confirmEditTask(cardId) {
 
             modalEdit.classList.remove("open");
             renderCard();
-        } else if (indexToEditInFinish!== -1 ) {
+        } else if (indexToEditInFinish !== -1) {
             finishTasks[indexToEditInFinish].title = valueOfTheNewEditedTitle;
             finishTasks[indexToEditInFinish].date = valueOfTheNewEditedDate;
             finishTasks[indexToEditInFinish].description = valueOfTheNewEditedDescription;
@@ -330,7 +356,7 @@ function renderFinishCard() {
         checkBoxLabel.innerHTML = "Tarefa Concluida ";
         const inputTypeCheckBox = document.createElement('input');
         inputTypeCheckBox.type = "checkbox";
-        inputTypeCheckBox.checked= true;
+        inputTypeCheckBox.checked = true;
         checkBoxLabel.appendChild(inputTypeCheckBox);
         newCard.appendChild(checkBoxLabel);
 
@@ -371,3 +397,17 @@ function renderFinishCard() {
         containerFinishCards.appendChild(newCard);
     }
 };
+
+
+function copyDescription(cardId) {
+    const textToBeCopy = document.getElementById(`description${cardId}`);
+    navigator.clipboard.writeText(textToBeCopy.textContent)
+        .then((value) => {
+            console.log(`O texto (${value}) foi copiado`);
+        })
+        .catch(() => {
+            console.log("Elemento não é uma string")
+        })
+};
+
+renderCard();
