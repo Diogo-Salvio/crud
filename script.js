@@ -138,9 +138,14 @@ function renderCard() {
         const inputTypeCheckBox = document.createElement('input');
         inputTypeCheckBox.type = "checkbox";
         checkBoxLabel.appendChild(inputTypeCheckBox);
-
         newCard.appendChild(checkBoxLabel);
 
+        const inputTypeFile = document.createElement('input');
+        inputTypeFile.type = "file";
+        inputTypeFile.accept = "iamge/jpeg, image/png , image/jpg";
+        newCard.appendChild(inputTypeFile);
+        
+        
         //Atribuição de um ID único para todos os dados que podem ser alterados na função editCard() e nas função para finalizar a tarefa
         newCard.id = `card${task.id}`;
         heading.id = `title${task.id}`;
@@ -343,6 +348,10 @@ function renderFinishCard() {
         descriptionP.textContent = finishtask.description;
         newCard.appendChild(descriptionP);
 
+        const copyButton = document.createElement('button');
+        copyButton.innerHTML = "Copiar tarefa";
+        newCard.appendChild(copyButton);
+
         const buttonRemove = document.createElement('button');
         buttonRemove.innerHTML = "Excluir Tarefa";
         newCard.appendChild(buttonRemove);
@@ -394,6 +403,10 @@ function renderFinishCard() {
             }
         });
 
+        copyButton.addEventListener('click', () => {
+            copyDescription(finishtask.id);
+        })
+
         containerFinishCards.appendChild(newCard);
     }
 };
@@ -402,7 +415,7 @@ function renderFinishCard() {
 function copyDescription(cardId) {
     const textToBeCopy = document.getElementById(`description${cardId}`);
     navigator.clipboard.writeText(textToBeCopy.textContent)
-        .then((value) => {
+        .then(() => {
             console.log('Texto copiado!');
         })
         .catch(() => {
