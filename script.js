@@ -144,14 +144,15 @@ function renderCard() {
         inputTypeFile.type = "file";
         inputTypeFile.accept = "iamge/jpeg, image/png , image/jpg";
         newCard.appendChild(inputTypeFile);
-        
-        
+
+
         //Atribuição de um ID único para todos os dados que podem ser alterados na função editCard() e nas função para finalizar a tarefa
         newCard.id = `card${task.id}`;
         heading.id = `title${task.id}`;
         inputDate.id = `date${task.id}`;
         descriptionP.id = `description${task.id}`;
         inputTypeCheckBox.id = `checkTask${task.id}`;
+        inputTypeFile.id = `inputfile${task.id}`;
 
         //Adição dos Listeners para os botões criados
         buttonRemove.addEventListener('click', () => {
@@ -182,7 +183,11 @@ function renderCard() {
 
         copyButton.addEventListener('click', () => {
             copyDescription(task.id);
-        })
+        });
+
+        inputTypeFile.addEventListener('change', () => {
+            readImage(task.id);
+        });
 
         containerCards.appendChild(newCard);
     }
@@ -422,5 +427,26 @@ function copyDescription(cardId) {
             console.log("Elemento não é uma string");
         })
 };
+
+
+//Função para a leitura de imagem
+function readImage(cardId) {
+    const inpuToRead = document.getElementById(`inputfile${cardId}`);
+    const image = inpuToRead.files[0];
+
+    if (image) {
+        const reader = new FileReader();//Cria um objeto da classe FileReader(permite a leitura de arquivos do usuário)
+
+        reader.onload = function (event) { //Quando o FileReader finaliza de ler a imagem ele dispara um evento onload 
+            const imageBase64 = event.target.result; //Resultado em base64 da imagem que pode ser utilizado no URL da imagem
+            const imagemteste = document.getElementById('imagemteste');
+            imagemteste.src = imageBase64;
+            
+            console.log(imageBase64);
+        };
+        reader.readAsDataURL(image);
+    };
+};
+
 
 renderCard();
