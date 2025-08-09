@@ -9,25 +9,15 @@ const closeBtnEdit = document.getElementById('closeModal2');
 const modalEdit = document.getElementById('modal2');
 
 //Arrays referente às tasks pendentes e as finalizadas
-const tasks = [
-    {
-        date: "2111-01-01",
-        datevalue: 4449438000000,
-        description: "Em termos gerais, aval pode significar aprovação, apoio ou garantia. No contexto jurídico e financeiro, o aval é uma garantia pessoal dada em títulos de crédito, onde uma pessoa (o avalista) se compromete a pagar a dívida caso o devedor principal não o faça. ",
-        id: 1,
-        title: "1"
-    },
-    {
-        date: "2111-02-02",
-        datevalue: 4449439000000,
-        description: "Em termos gerais, aval pode significar aprovação, apoio ou garantia. No contexto jurídico e financeiro, o aval é uma garantia pessoal dada em títulos de crédito, onde uma pessoa (o avalista) se compromete a pagar a dívida caso o devedor principal não o faça. ",
-        id: 2,
-        title: "2"
-    }
-];
-const finishTasks = [];
+let tasks = [];
+let finishTasks = [];
 
-
+window.onload = () => {
+    tasks = JSON.parse(localStorage.getItem('tasks')) || [];
+    finishTasks = JSON.parse(localStorage.getItem('finishTasks')) || [];
+    renderCard();
+    renderFinishCard();
+};
 
 //Eventos de configuração do Modal para criarção de Tarefas
 openBtn.addEventListener('click', () => {
@@ -58,18 +48,19 @@ const containerFinishCards = document.getElementById('finishtasks')
 //Adiciona o objeto newTask no Array tasks[] e em seguida chama a função renderCard()
 function createTask() {
 
-
     //Variáveis importante para a validação da Data
     const today = new Date();
     today.setHours(0, 0, 0, 0);
     const taskdate = new Date(date.value);
     taskdate.setHours(0, 0, 0, 0);
 
+    const randomId = getRandomInt(1 ,100);
+
     const newTask = {
         title: title.value,
         date: date.value,
         description: description.value,
-        id: tasks.length + 1,
+        id: randomId,
         datevalue: taskdate.getTime()
     };
     if (date.value.length != 10 || today.getTime() > taskdate.getTime()) {
@@ -86,6 +77,7 @@ function createTask() {
         date.value = '';
         description.value = '';
         renderCard();
+        saveInLocalStorage();
     }
 }
 
@@ -214,12 +206,14 @@ function removeTask(cardId) {
     if (indexInTasks !== -1) {
         tasks.splice(indexInTasks, 1);
         renderCard();
+        saveInLocalStorage();
     };
 
     const indexInFinishTasks = finishTasks.findIndex(task => task.id === cardId);
     if (indexInFinishTasks !== -1) {
         finishTasks.splice(indexInFinishTasks, 1);
         renderFinishCard();
+        saveInLocalStorage();
     };
 }
 
@@ -291,6 +285,7 @@ function confirmEditTask(cardId) {
 
             modalEdit.classList.remove("open");
             renderCard();
+            saveInLocalStorage();
         } else if (indexToEditInFinish !== -1) {
             finishTasks[indexToEditInFinish].title = valueOfTheNewEditedTitle;
             finishTasks[indexToEditInFinish].date = valueOfTheNewEditedDate;
@@ -299,6 +294,7 @@ function confirmEditTask(cardId) {
 
             modalEdit.classList.remove("open");
             renderFinishCard();
+            saveInLocalStorage();
         }
 
 
@@ -318,6 +314,7 @@ function finishTask(cardId) {
         finishTasks.push(tasks[indextomove]);
         tasks.splice(indextomove, 1);
         renderFinishCard();
+        saveInLocalStorage();
     };
 
 };
@@ -332,6 +329,7 @@ function moveToPendingTasks(cardId) {
         tasks.push(finishTasks[indextomove]);
         finishTasks.splice(indextomove, 1);
         renderCard();
+        saveInLocalStorage();
     };
 
 };
@@ -491,6 +489,7 @@ function readImage(cardId) {
         };
         reader.readAsDataURL(image);//Passa o valor para o FileReader ler
         buttonShowImg.style.display = 'block';//Mostra o botão de visualizar a imagem
+        saveInLocalStorage()
     };
 };
 
@@ -522,6 +521,14 @@ function openModalImg(cardId) {
 
 };
 
+function saveInLocalStorage() {
+    localStorage.setItem('tasks', JSON.stringify(tasks)) || [];
+    localStorage.setItem('finishTasks', JSON.stringify(finishTasks)) || [];
+}
 
 
-renderCard();
+function getRandomInt(min, max) {
+  min = Math.ceil(min);
+  max = Math.floor(max);
+  return Math.floor(Math.random() * (max - min) + min);
+}
