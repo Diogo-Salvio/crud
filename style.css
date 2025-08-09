@@ -68,6 +68,18 @@ header button:hover{
     background-color: white;
 }
 
+.img {
+    max-width: 450px;
+    max-height: 450px;
+    width: 50%;
+    height: 50%;
+    border-radius: 8px;
+}
+
+#img {
+    border-radius: 8px;
+}
+
 .container {
     display: flex;
     justify-content: flex-start; 

@@ -145,6 +145,13 @@ function renderCard() {
         inputTypeFile.accept = "iamge/jpeg, image/png , image/jpg";
         newCard.appendChild(inputTypeFile);
 
+        const buttonOpenModalImg = document.createElement('button');
+        buttonOpenModalImg.innerHTML = "Visualizar imagem anexada";
+        if (!task.imgurl){
+        buttonOpenModalImg.style.display = "none";
+        };
+        newCard.appendChild(buttonOpenModalImg);
+
 
         //Atribuição de um ID único para todos os dados que podem ser alterados na função editCard() e nas função para finalizar a tarefa
         newCard.id = `card${task.id}`;
@@ -153,6 +160,7 @@ function renderCard() {
         descriptionP.id = `description${task.id}`;
         inputTypeCheckBox.id = `checkTask${task.id}`;
         inputTypeFile.id = `inputfile${task.id}`;
+        buttonOpenModalImg.id = `buttonopenimg${task.id}`;
 
         //Adição dos Listeners para os botões criados
         buttonRemove.addEventListener('click', () => {
@@ -187,6 +195,10 @@ function renderCard() {
 
         inputTypeFile.addEventListener('change', () => {
             readImage(task.id);
+        });
+
+        buttonOpenModalImg.addEventListener('click', () => {
+            openModalImg(task.id);
         });
 
         containerCards.appendChild(newCard);
@@ -374,12 +386,26 @@ function renderFinishCard() {
         checkBoxLabel.appendChild(inputTypeCheckBox);
         newCard.appendChild(checkBoxLabel);
 
+        const inputTypeFile = document.createElement('input');
+        inputTypeFile.type = "file";
+        inputTypeFile.accept = "iamge/jpeg, image/png , image/jpg";
+        newCard.appendChild(inputTypeFile);
+
+        const buttonOpenModalImg = document.createElement('button');
+        buttonOpenModalImg.innerHTML = "Visualizar imagem anexada";
+        if (!finishtask.imgurl){
+        buttonOpenModalImg.style.display = "none";
+        };
+        newCard.appendChild(buttonOpenModalImg);
+
         //Atribuição de um ID único para todos os dados que podem ser alterados na função editCard() e nas função para finalizar a tarefa
         newCard.id = `card${finishtask.id}`;
         heading.id = `title${finishtask.id}`;
         inputDate.id = `date${finishtask.id}`;
         descriptionP.id = `description${finishtask.id}`;
         inputTypeCheckBox.id = `checkTask${finishtask.id}`;
+        inputTypeFile.id = `inputfile${finishtask.id}`;
+        buttonOpenModalImg.id = `buttonopenimg${finishtask.id}`;
 
         //Adição dos Listeners para os botões criados
         buttonRemove.addEventListener('click', () => {
@@ -410,7 +436,16 @@ function renderFinishCard() {
 
         copyButton.addEventListener('click', () => {
             copyDescription(finishtask.id);
-        })
+        });
+
+        inputTypeFile.addEventListener('change', () => {
+            readImage(finishtask.id);
+        });
+
+        buttonOpenModalImg.addEventListener('click', () => {
+            openModalImg(finishtask.id);
+        });
+
 
         containerFinishCards.appendChild(newCard);
     }
@@ -432,6 +467,7 @@ function copyDescription(cardId) {
 //Função para a leitura de imagem
 function readImage(cardId) {
     const inpuToRead = document.getElementById(`inputfile${cardId}`);
+    const buttonShowImg = document.getElementById(`buttonopenimg${cardId}`);
     const image = inpuToRead.files[0];
 
     if (image) {
@@ -439,14 +475,53 @@ function readImage(cardId) {
 
         reader.onload = function (event) { //Quando o FileReader finaliza de ler a imagem ele dispara um evento onload 
             const imageBase64 = event.target.result; //Resultado em base64 da imagem que pode ser utilizado no URL da imagem
-            const imagemteste = document.getElementById('imagemteste');
-            imagemteste.src = imageBase64;
-            
-            console.log(imageBase64);
+
+            const indexToAddImgInPending = tasks.findIndex(task => task.id === cardId);
+            const indexToAddImgInFinish = finishTasks.findIndex(task => task.id === cardId);
+
+            if (indexToAddImgInPending !== -1) {
+                const object = tasks.find(key => key.id === cardId);
+                object.imgurl = imageBase64;
+            } else if (indexToAddImgInFinish !== -1) {
+                const object = finishTasks.find(key => key.id === cardId);
+                object.imgurl = imageBase64;
+            };
+
+
         };
-        reader.readAsDataURL(image);
+        reader.readAsDataURL(image);//Passa o valor para o FileReader ler
+        buttonShowImg.style.display = 'block';//Mostra o botão de visualizar a imagem
     };
 };
+
+
+function openModalImg(cardId) {
+    const modalToOpen = document.getElementById(`buttonopenimg${cardId}`);
+    const modal = document.getElementById('modalimg');
+    const imgInHtml = document.getElementById('img');
+    modalToOpen.addEventListener('click', () => {
+        modalimg.classList.add("open");
+    });
+    modal.addEventListener('click', (event) => {
+        if (event.target === modal) {
+            modal.classList.remove("open");
+        }
+    });
+    //const object = tasks.find(key => key.id === cardId);
+
+    const indexToAddUrlInPending = tasks.findIndex(task => task.id === cardId);
+    const indexToAddUrlInFinish = finishTasks.findIndex(task => task.id === cardId);
+
+    if (indexToAddUrlInPending !== -1) {
+        const object = tasks.find(key => key.id === cardId);
+        imgInHtml.src = object.imgurl;
+    } else if (indexToAddUrlInFinish !== -1) {
+        const object = finishTasks.find(key => key.id === cardId);
+        imgInHtml.src = object.imgurl;
+    };
+
+};
+
 
 
 renderCard();
